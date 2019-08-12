@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>Samaia IT - Cadastro Pessoa Física</h1>
+    <h2>{{ mensagem }}</h2>
     <table>
       <thead>
         <td>ID</td>
@@ -30,7 +31,8 @@ export default {
   name: 'app',
   data () {
     return {
-      pessoas: []
+      pessoas: [],
+      mensagem: ''
     }
   }, 
   created() {
@@ -41,9 +43,17 @@ export default {
   methods: {
     remove(idPessoa) {
       if(confirm("Deseja remover a pessoa?"))
-        alert("Sim");
-      else
-        alert("Não")
+        this.$http.delete('http://localhost:8081/samaia/ws/pessoa/' + idPessoa)
+          .then(
+              () => {
+                this.mensagem = "Pessoa removida com sucesso";
+                this.consultarTodos();
+              }, err => this.mensagem = err);
+    }, 
+    consultarTodos() {
+      this.$http.get('http://localhost:8081/samaia/ws/pessoa')
+        .then(res => res.json())
+        .then(pessoas => this.pessoas = pessoas, err => console.log('erro ' + err));
     }
   }
 }
