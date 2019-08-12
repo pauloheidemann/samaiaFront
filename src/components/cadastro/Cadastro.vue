@@ -14,7 +14,7 @@
       </div>
       <div class="controle">
         <label for="dataNascimento">DATA DE NASCIMENTO</label>
-        <input id="dataNascimento" v-model="pessoa.dataNascimento">
+        <input id="dataNascimento" type="date" v-model="pessoa.dataNascimento">
       </div>
       <div class="controle">
         <label for="email">EMAIL</label>
@@ -41,8 +41,25 @@ export default {
         }
     }, 
 
+    created() {
+        if(this.$route.params.id) {
+        this.$http.get('http://localhost:8081/samaia/ws/pessoa/' + this.$route.params.id)
+            .then(res => res.json())
+            .then(pessoa => this.pessoa = pessoa);
+        }
+    },
+
     methods: {
         salvar() {
+            if(this.$route.params.id) {
+                this.$http.put('http://localhost:8081/samaia/ws/pessoa', this.pessoa)
+                .then(
+                    () => {
+                        this.mensagem = "Cadastro atualizado com sucesso";
+                    },  
+                    err => this.mensagem = err
+                );
+            } else {
             this.$http.post('http://localhost:8081/samaia/ws/pessoa', this.pessoa)
                 .then(
                     () => {
@@ -51,6 +68,7 @@ export default {
                     },  
                     err => this.mensagem = err
                 );
+            }
         }
     }
 }

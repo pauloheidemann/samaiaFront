@@ -1,8 +1,11 @@
 <template>
     <nav>
       <ul>
-        <li v-for="route in rotas">
-          <router-link :to="route.path ? route.path : '/'">{{ route.titulo }}</router-link>
+        <li>
+          <router-link to="/">Home</router-link>
+        </li>
+        <li>
+          <router-link to="cadastro">Cadastro</router-link>
         </li>
       </ul>
     </nav>
